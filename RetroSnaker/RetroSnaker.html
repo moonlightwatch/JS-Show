@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<body style="text-align: center;">
+    <dev id="debug"></dev>
+    <canvas id="canvas" width="1366" height="768" style="border: thin solid black;"></canvas>
+
+    <script>
+        // 基本尺寸
+        var baseSize = 10; // 10像素
+
+        // 蛇
+        var snake = {
+            body: new Array(),
+            direction: "left", // left, right, up, down
+        }
+
+        // 食物
+        var food = {
+            x: 0,
+            y: 0,
+        }
+
+        // 场地 长
+        var backWidth = 1366;
+
+        // 场地 宽
+        var backHeight = 768;
+
+
+        // 蛇头向指定方向移动
+        function moveHead() {
+            switch (snake.direction) {
+                case "left":
+                    snake.body[0].x -= baseSize; // 向左移动
+                    break;
+                case "right":
+                    snake.body[0].x += baseSize; // 向右移动
+                    break;
+                case "up":
+                    snake.body[0].y -= baseSize; // 向上移动
+                    break;
+                case "down":
+                    snake.body[0].y += baseSize; // 向下移动
+                    break;
+            }
+        }
+
+        // 蛇身向前移动 前指的是每块身子的前一块
+        function moveBody() {
+            for (var i = snake.body.length - 1; i > 0; i--) {
+                // 身体每块移动到前一块的位置，使用Math.round避免引用传递产生的错误
+                snake.body[i].x = Math.round(snake.body[i - 1].x);
+                snake.body[i].y = Math.round(snake.body[i - 1].y);
+            }
+        }
+
+        // 吃到食物，添加一块身子，食物刷新位置
+        // 判断出界，游戏结束
+        function check() {
+            // 吃到食物，添加一块身子，食物刷新位置
+            if (Math.abs(food.x - snake.body[0].x) < baseSize && Math.abs(food.y - snake.body[0].y) < baseSize) {
+                snake.body.push({ x: -20, y: -20 });
+                food = {
+                    x: Math.round((Math.random() * 1360) / baseSize) * baseSize,
+                    y: Math.round((Math.random() * 760) / baseSize) * baseSize,
+                }
+               
+            }
+
+            // 判断出界，游戏结束 
+            if (snake.body[0].x < 0 || snake.body[0].x > backWidth || snake.body[0].y < 0 || snake.body[0].y > backHeight) {
+                alert("游戏结束");
+                // 重新初始化
+                init();
+            }
+        }
+
+        function init() {
+            snake = {
+                body: new Array(),
+                direction: "left", // left, right, up, down
+            };
+            snake.body.push({ x: 1000, y: 350 });
+            snake.body.push({ x: 1000 + baseSize, y: 350 });
+            food = {
+                x: Math.round((Math.random() * 1360) / baseSize) * baseSize,
+                y: Math.round((Math.random() * 760) / baseSize) * baseSize,
+            }
+        }
+
+        // 键盘控制方向
+        document.onkeydown = function (e) {
+            if (e) {
+                switch (e.keyCode) {
+                    case 37: // 左键
+                        // 若非右行，则改方向为左
+                        if (snake.direction == "right") break;
+                        snake.direction = "left";
+                        break;
+                    case 38: // 右键
+                        if (snake.direction == "down") break;
+                        snake.direction = "up";
+                        break;
+                    case 39: // 上键
+                        if (snake.direction == "left") break;
+                        snake.direction = "right";
+                        break;
+                    case 40:// 下键
+                        if (snake.direction == "up") break;
+                        snake.direction = "down";
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // 获取cancas标签
+        var canvasElement = document.getElementById("canvas");
+        // 设定尺寸
+        canvasElement.clientHeight = backHeight;
+        canvasElement.clientWidth = backWidth;
+
+        // 获取绘画上下文（句柄）
+        var ctx = canvasElement.getContext("2d");
+
+        // 绘制
+        function draw() {
+            // 清理
+            ctx.clearRect(0, 0, backWidth, backHeight);
+
+            // 绘制食物
+            ctx.beginPath();
+            ctx.fillStyle = "#ff0000" // 红的
+            ctx.fillRect(food.x, food.y, baseSize, baseSize);
+            ctx.closePath();
+
+            // 绘制蛇头
+            ctx.beginPath();
+            ctx.fillStyle = "#000000" // 黑的
+            ctx.fillRect(snake.body[0].x, snake.body[0].y, baseSize, baseSize);
+            ctx.closePath();
+
+            // 绘制身体
+            ctx.beginPath();
+            for (var i = 1; i < snake.body.length; i++) {
+                ctx.fillStyle = "#00ff00" // 绿的
+                ctx.fillRect(snake.body[i].x, snake.body[i].y, baseSize, baseSize);
+            }
+            ctx.closePath();
+        }
+
+        // tick 刷新
+        function tick() {
+            moveBody();
+            moveHead();
+            check();
+            draw();
+        }
+
+        init();
+
+        setInterval("tick()", 100);
+    </script>
+</body>
+
+</html>
