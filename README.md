@@ -11,7 +11,7 @@
 
 ### 展示
 
-- [2048 - 演示](https://blog.moonlightwatch.me/JS-Show/2048/)
-- [打砖块 - 演示](https://blog.moonlightwatch.me/JS-Show/Krakout/krakout.html)
-- [计时器 - 演示](https://blog.moonlightwatch.me/JS-Show/Timer_In_JS/)
-- [日历 - 代码](https://blog.moonlightwatch.me/moonlightwatch/JS-Show/mCalendar/mCalendar.html)
+- [2048 - 演示](https://moonlightwatch.githu.io/JS-Show/2048/)
+- [打砖块 - 演示](https://moonlightwatch.githu.io/JS-Show/Krakout/krakout.html)
+- [计时器 - 演示](https://moonlightwatch.githu.io/JS-Show/Timer_In_JS/)
+- [日历 - 代码](https://moonlightwatch.githu.io/JS-Show/mCalendar/mCalendar.html)
